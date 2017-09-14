@@ -25,10 +25,10 @@ ping_check() {
 walled_garden_check() {
   local _status=$(curl --write-out "%{http_code} %{time_pretransfer}"  --silent --connect-timeout 2 --output /dev/null $WALLED_GARDEN_URI)
   local status_code=$(echo "$_status" | cut -d " " -f 1)
-  local resp_full=$(echo $_status | cut -d " " -f 2)
-  local resp=$(printf "%.1f" $(echo "scale=4; $resp_full*1000" | bc -l))
+  local latency_full=$(echo $_status | cut -d " " -f 2)
+  local latency=$(printf "%.1f" $(echo "scale=4; $latency_full*1000" | bc -l))
 
-  [[ $status_code == "204" ]] && echo "$resp" || echo ""
+  [[ $status_code == "204" ]] && echo "$latency" || echo ""
 }
 
 load_actions() {

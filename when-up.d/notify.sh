@@ -7,4 +7,4 @@ FAILED_ATTEMPT_COUNT=$4
   source $XDG_CONFIG_HOME/netstatusd/config
 
 [[ $INTERVAL_COUNT != 1 ]] && \
-  notify-send "[netstatusd] Internet connectivity has been restored after $((FAILED_ATTEMPT_COUNT/INTERVAL_COUNT)) seconds."
+  notify-send "[netstatusd] Internet connectivity has been restored after $((FAILED_ATTEMPT_COUNT/INTERVAL)) seconds."
