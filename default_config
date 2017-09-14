@@ -1,0 +1,17 @@
+# Interval in which to poll (in seconds)
+INTERVAL=1
+
+# Primary hostname or IP address
+PRIMARY_HOST="8.8.8.0"
+
+# Secondary hostname or IP address
+SECONDARY_HOST="208.67.222.222"
+
+# Walled garden URI
+WALLED_GARDEN_URI="http://www.gstatic.com/generate_204"
+
+# Number of unsuccessful attempts before assuming internet is down
+MAX_ATTEMPTS=3
+
+# Data directory
+DATA_DIR=$XDG_DATA_HOME/netstatusd
