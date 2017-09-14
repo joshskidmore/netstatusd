@@ -1,7 +1,7 @@
 # netstatusd
 `netstatusd` is a simple bash daemon that aggressively monitors your internet connectivity status by performing up to three tests at a given interval. Whenever an attempt is successful (or unsuccessful), `netstatusd` executes provided "actions."
 
-`netstatusd` also executes actions (`when-down.d/*`) whenever the internet is believed to be disconnected as well as another action (`when-up.d/*`) once internet connectivity has been restored.
+`netstatusd` also executes actions (`when-down.d/*`) whenever the internet is believed to be disconnected as well as another set of actions (`when-up.d/*`) once internet connectivity has been restored.
 
 
 ## Requirements
@@ -25,7 +25,7 @@ An action is merely a shell script that is executed once an attempt or event occ
 An action is always provided the following arguments:
 
 1. `SOURCE` - If an attempt is successful, the source of the successful test. Valid sources are `primary`, `secondary` or `walled_garden`. This argument is empty if an attempt was unsuccessful.
-2. `LATENCY` - If an attempt is successful, the latency (in ms) of the successful test.
+2. `LATENCY` - If an attempt is successful, the latency (in ms) of the successful test. This is empty if a test is unsuccessful.
 3. `INTERVAL_COUNT` - The incrementing count (starting at 1).
 4. `FAILED_ATTEMPT_COUNT` - If an attempt was unsuccessful, an incrementing count for the number of unsuccessful attempts. This counter is reset to 0 once internet connectivity has been restored.
 

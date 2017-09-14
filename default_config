@@ -2,7 +2,7 @@
 INTERVAL=1
 
 # Primary hostname or IP address
-PRIMARY_HOST="8.8.8.0"
+PRIMARY_HOST="8.8.8.8"
 
 # Secondary hostname or IP address
 SECONDARY_HOST="208.67.222.222"
