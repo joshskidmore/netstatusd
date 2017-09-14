@@ -11,8 +11,9 @@
 
 
 ## Installation
-1. Copy `default_config` to `~/.config/netstatusd/config`
-2. Execute `./netstatusd`
+1. `cp default_config ~/.config/netstatusd/config`
+2. `cp -R ./*.d ~/.config/netstatusd/`
+2. `./netstatusd`
 
 Note: `netstatusd` runs as a daemon and is meant to be backgrounded. `netstatusd` is meant to run as an unprivileged user, although technically, it could be run as root.
 
