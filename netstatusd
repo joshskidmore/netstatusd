@@ -9,7 +9,7 @@ INTERVAL_COUNT=1
 
 
 if [[ ! -f $CONFIG_FILE ]]; then
-  echo "A configuration file was not found in at $CONFIG"
+  echo "A configuration file was not found at $CONFIG_FILE"
   exit
 fi
 
