@@ -18,7 +18,6 @@ source $CONFIG_FILE
 # Note: $DATA_DIR is defined in $CONFIG_FILE
 export DATA_DIR
 
-
 ping_check() {
   local host=${1:-$PRIMARY_HOST}
   echo $(ping -c 1 -W 2 $host 2>&1 | awk -F "=" '/time=/ {print $4}' | cut -d " " -f 1)
@@ -64,8 +63,10 @@ create_data_dir() {
 }
 
 check() {
-  [[ $INTERVAL_COUNT == 1 ]] && \
+  if [[ $INTERVAL_COUNT == 1 ]]; then
+    echo "$(date) - ON_START"
     execute_actions "$ON_START_ACTIONS"
+  fi
 
   local latency=$(ping_check $PRIMARY_HOST)
   local source="primary"
@@ -82,23 +83,33 @@ check() {
 
   if [[ -n $latency ]]; then
     if [[ $FAILED_ATTEMPT_COUNT -ge $MAX_ATTEMPTS ]] && [[ -n $(walled_garden_check) ]]; then
+      echo "$(date) - WHEN_UP (SRC: ${source} | LAT: ${latency} | INT: ${INTERVAL_COUNT} | FAC: ${FAILED_ATTEMPT_COUNT})"
       execute_actions "$WHEN_UP_ACTIONS" "$source" "$latency" "$INTERVAL_COUNT" "$FAILED_ATTEMPT_COUNT"
       FAILED_ATTEMPT_COUNT=0
     fi
 
-    [[ $INTERVAL_COUNT == 1 ]] && [[ -n $(walled_garden_check) ]] && \
+    if [[ $INTERVAL_COUNT == 1 ]] && [[ -n $(walled_garden_check) ]]; then
+      echo "$(date) - WHEN_UP/INITIAL (SRC: ${source} | LAT: ${latency} | INT: ${INTERVAL_COUNT} | FAC: ${FAILED_ATTEMPT_COUNT})"
       execute_actions "$WHEN_UP_ACTIONS" "$source" "$latency" "$INTERVAL_COUNT" "$FAILED_ATTEMPT_COUNT"
+    elif [[ -z $(walled_garden_check) ]]; then
+      # reset INTERVAL_COUNT
+      INTERVAL_COUNT=0
+    fi
 
     execute_actions "$SUCCESSFUL_ATTEMPT_ACTIONS" "$source" "$latency" "$INTERVAL_COUNT" "$FAILED_ATTEMPT_COUNT"
   else
     latency=""
     source=""
 
-    [[ $FAILED_ATTEMPT_COUNT == $MAX_ATTEMPTS ]] && \
+    if [[ $FAILED_ATTEMPT_COUNT == $MAX_ATTEMPTS ]]; then
+      echo "$(date) - WHEN_DOWN (SRC: ${source} | LAT: ${latency} | INT: ${INTERVAL_COUNT} | FAC: ${FAILED_ATTEMPT_COUNT})"
       execute_actions "$WHEN_DOWN_ACTIONS" "$source" "$latency" "$INTERVAL_COUNT" "$FAILED_ATTEMPT_COUNT"
+    fi
 
-    [[ $INTERVAL_COUNT == 1 ]] && \
+    if [[ $INTERVAL_COUNT == 1 ]]; then
+      echo "$(date) - WHEN_DOWN/INITIAL (SRC: ${source} | LAT: ${latency} | INT: ${INTERVAL_COUNT} | FAC: ${FAILED_ATTEMPT_COUNT})"
       execute_actions "$WHEN_DOWN_ACTIONS" "$source" "$latency" "$INTERVAL_COUNT" "$FAILED_ATTEMPT_COUNT"
+    fi
 
     execute_actions "$UNSUCCESSFUL_ATTEMPT_ACTIONS" "$source" "$latency" "$INTERVAL_COUNT" "$FAILED_ATTEMPT_COUNT"
 
