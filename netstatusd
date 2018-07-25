@@ -91,10 +91,11 @@ check() {
     if [[ $INTERVAL_COUNT == 1 ]] && [[ -n $(walled_garden_check) ]]; then
       echo "$(date) - WHEN_UP/INITIAL (SRC: ${source} | LAT: ${latency} | INT: ${INTERVAL_COUNT} | FAC: ${FAILED_ATTEMPT_COUNT})"
       execute_actions "$WHEN_UP_ACTIONS" "$source" "$latency" "$INTERVAL_COUNT" "$FAILED_ATTEMPT_COUNT"
-    elif [[ -z $(walled_garden_check) ]]; then
-      # reset INTERVAL_COUNT
-      INTERVAL_COUNT=0
     fi
+    # elif [[ -z $(walled_garden_check) ]]; then
+      # reset INTERVAL_COUNT
+      # INTERVAL_COUNT=0
+    # fi
 
     execute_actions "$SUCCESSFUL_ATTEMPT_ACTIONS" "$source" "$latency" "$INTERVAL_COUNT" "$FAILED_ATTEMPT_COUNT"
   else
